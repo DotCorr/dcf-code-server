@@ -24,3 +24,4 @@ echo ""
 echo "📁 Release packages are in: release-packages/"
 ls -lh release-packages/ 2>/dev/null | grep -E "\.(tar\.gz|zip)$" || echo "   (No packages found yet)"
 
+
