@@ -1,0 +1,6 @@
+
+> code-server@0.0.0 build:vscode
+> ./ci/build/build-vscode.sh
+
+VERSION not set. Please set before running this script:
+VERSION='0.0.0' npm run build:vscode
