@@ -17,6 +17,19 @@ main() {
     ARCH=$1
   fi
 
+  # Get VERSION from environment or package.json
+  if [[ ! ${VERSION-} ]]; then
+    VERSION=$(jq -r .version package.json)
+    if [[ "$VERSION" == "null" || -z "$VERSION" ]]; then
+      echo "ERROR: VERSION not set and could not be determined from package.json"
+      echo "Please set VERSION environment variable:"
+      echo "  VERSION='1.0.0' npm run package"
+      exit 1
+    fi
+    echo "Using version from package.json: $VERSION"
+  fi
+  export VERSION
+
   mkdir -p release-packages
 
   release_archive
@@ -36,10 +49,11 @@ release_archive() {
 
   echo "done (release-packages/$release_name)"
 
-  release_gcp
+  release_gcp "$release_name"
 }
 
 release_gcp() {
+  local release_name="$1"
   mkdir -p "release-gcp/$VERSION"
   cp "release-packages/$release_name.tar.gz" "./release-gcp/$VERSION/$OS-$ARCH.tar.gz"
   mkdir -p "release-gcp/latest"
